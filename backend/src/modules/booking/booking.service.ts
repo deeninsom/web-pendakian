@@ -5,6 +5,7 @@ import Bookings from './booking.entity';
 import { BookingDTO } from './booking.dto';
 import { LessThan } from 'typeorm';
 import Kuotas from '../kuota/kuota.entity';
+import Blacklists from '../blacklist/blacklist.entity';
 
 @Injectable()
 export class BookingService {
@@ -14,6 +15,9 @@ export class BookingService {
 
         @InjectRepository(Kuotas)
         private kuotaRepository: Repository<Kuotas>,
+
+        @InjectRepository(Blacklists)
+        private blacklistRepository: Repository<Blacklists>,
     ) { }
 
     async get(search: string, date: string, status: string) {
@@ -52,12 +56,11 @@ export class BookingService {
         const randomDigits = Math.floor(1000 + Math.random() * 9000);
         const newKodeBooking = `PNG-${formattedDate}-${randomDigits}`;
 
-        const payload: any = bookingDTO
-        payload.kode_booking = newKodeBooking
-        const createPayload = this.bookingRepository.create(payload)
+        bookingDTO.kode_booking = newKodeBooking
+        const createPayload = this.bookingRepository.create(bookingDTO)
         const findKuota = await this.kuotaRepository.findOne({
             where: {
-                tanggal: Like(`%${payload.tanggal_naik}%`)
+                tanggal: Like(`%${bookingDTO.tanggal_naik}%`)
             }
         })
 
@@ -71,6 +74,8 @@ export class BookingService {
             findKuota.kuota = findKuota.kuota - 1
             await this.kuotaRepository.save(findKuota)
         }
+
+        console.log(bookingDTO)
 
         const createBooking = await this.bookingRepository.save(createPayload);
         return createBooking

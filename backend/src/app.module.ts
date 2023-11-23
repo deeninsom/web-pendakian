@@ -13,6 +13,10 @@ import { CronJobModule } from './schedule/schedule.module';
 import Users from './modules/user/user.entity';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import Websites from './modules/website/website.entity';
+import { WebsiteModule } from './modules/website/website.module';
+import Blacklists from './modules/blacklist/blacklist.entity';
+import { BlacklistModule } from './modules/blacklist/blacklist.module';
 
 @Module({
   imports: [
@@ -47,14 +51,18 @@ import { AuthModule } from './modules/auth/auth.module';
       entities: [
         Bookings,
         Kuotas,
-        Users
+        Users,
+        Websites,
+        Blacklists
       ],
     }),
     AuthModule,
     BookingModule,
     KuotaModule,
     CronJobModule,
-    UserModule
+    UserModule,
+    WebsiteModule,
+    BlacklistModule
   ],
   controllers: [UploadController]
 })

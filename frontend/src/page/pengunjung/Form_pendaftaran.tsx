@@ -10,9 +10,10 @@ const Form_pendaftaran = () => {
 
   const initialMember = {
     nama: '',
-    no_telepone: '',
+    noIdentitas: '',
+    noTelepone: '',
     alamat: '',
-    jenis_kelamin: ''
+    jenisKelamin: ''
   };
 
   const [formData, setFormData] = useState({
@@ -89,6 +90,7 @@ const Form_pendaftaran = () => {
     return (
       anggotaData.nama !== '' &&
       anggotaData.noTelepon !== '' &&
+      anggotaData.noIdentitas !== '' &&
       anggotaData.alamat !== '' &&
       anggotaData.jenisKelamin !== ''
     );
@@ -241,18 +243,29 @@ const Form_pendaftaran = () => {
                         }}
                         type="text" className="form-control" />
                     </div>
-                    <div className="col-md-3 my-2">
+                    <div className="col-md-2 my-2">
                       <label className="form-label">No. Telepon</label>
                       <input
-                        value={anggota.no_telepone}
+                        value={anggota.noTelepone}
                         onChange={(e) => {
                           const updatedAnggota = [...formData.anggota];
-                          updatedAnggota[index].no_telepone = e.target.value;
+                          updatedAnggota[index].noTelepone = e.target.value;
                           setFormData({ ...formData, anggota: updatedAnggota });
                         }}
                         type="text" className="form-control" />
                     </div>
-                    <div className="col-md-3 my-2">
+                    <div className="col-sm-2 my-2">
+                      <label className="form-label">No. Identitas</label>
+                      <input
+                        value={anggota.noIdentitas}
+                        onChange={(e) => {
+                          const updatedAnggota = [...formData.anggota];
+                          updatedAnggota[index].noIdentitas = e.target.value;
+                          setFormData({ ...formData, anggota: updatedAnggota });
+                        }}
+                        type="text" className="form-control" />
+                    </div>
+                    <div className="col-md-2 my-2">
                       <label className="form-label">Alamat</label>
                       <input
                         value={anggota.alamat}
@@ -266,10 +279,10 @@ const Form_pendaftaran = () => {
                     <div className="col-md-2 my-2">
                       <label className="form-label">Jenis Kelamin</label>
                       <select
-                        value={anggota.jenis_kelamin}
+                        value={anggota.jenisKelamin}
                         onChange={(e) => {
                           const updatedAnggota = [...formData.anggota];
-                          updatedAnggota[index].jenis_kelamin = e.target.value;
+                          updatedAnggota[index].jenisKelamin = e.target.value;
                           setFormData({ ...formData, anggota: updatedAnggota });
                         }}
                         id="inputState" className="form-select">

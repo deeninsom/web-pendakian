@@ -12,15 +12,25 @@ const AdminDashboard = () => {
   const [statusTurun, setStatusTurun] = useState(false)
   const [bookingId, setBookingId] = useState()
   const [totalBooking, setTotalBooking] = useState([])
+  const [allBooking, setAllBooking] = useState([])
 
   useEffect(() => {
+    axiosInstance.get('/bookings')
+      .then((response) => {
+        setAllBooking(response.data.data)
+      })
+      .catch((error) => {
+        alert(`Error fetching booking data: ${error}`)
+      });
+
+
     axiosInstance.get('/bookings?status=1')
-    .then((response)=>{
-      setTotalBooking(response.data.data)
-    })
-    .catch((error) => {
-      alert(`Error fetching booking data: ${error}`)
-    });
+      .then((response) => {
+        setTotalBooking(response.data.data)
+      })
+      .catch((error) => {
+        alert(`Error fetching booking data: ${error}`)
+      });
 
     axiosInstance.get(`/bookings?search=${searchValue}&&filterDate=${selectedDate}&&status=1`)
       .then((response) => {
@@ -78,14 +88,23 @@ const AdminDashboard = () => {
 
   return (
     <LayoutAdmin>
-      <div className="card" style={{ marginTop: "35px", width: "250px", backgroundColor: "#F1EFEF" }}>
-        <div className="card-body d-flex gap-2 align-items-center justify-content-center">
-          <i className="fa fa-solid fa-user"></i>
-          <span>Data Pengunjung</span>
+      <div className="content-card d-flex gap-3">
+        <div className="card" style={{ marginTop: "35px", width: "250px", backgroundColor: "#F1EFEF" }}>
+          <div className="card-body d-flex gap-2 align-items-center justify-content-center">
+            <i className="fa fa-solid fa-user"></i>
+            <span>Data Pengunjung</span>
+          </div>
+          <span style={{ textAlign: "center", fontWeight: "bold", marginBottom: "10px", color: "green" }}>{totalBooking.length} <span style={{ color: "black", fontWeight: "normal" }}>Orang</span></span>
         </div>
-        <span style={{ textAlign: "center", fontWeight: "bold", marginBottom: "10px", color: "green" }}>{totalBooking.length}</span>
+        <div className="card" style={{ marginTop: "35px", width: "250px", backgroundColor: "#F1EFEF" }}>
+          <div className="card-body d-flex gap-2 align-items-center justify-content-center">
+            <i className="fa fa-solid fa-user"></i>
+            <span>Total Booking</span>
+          </div>
+          <span style={{ textAlign: "center", fontWeight: "bold", marginBottom: "10px", color: "green" }}>{allBooking.length} <span style={{ color: "black", fontWeight: "normal" }}>Orang</span></span>
+        </div>
       </div>
-      <div className="tabel-booking mb-4">
+      <div className="tabel-booking mb-4 mt-4">
         <span className="d-block pt-4 mb-2">Filter</span>
         <div className="input-group">
           <div className="form-outline d-flex gap-2">

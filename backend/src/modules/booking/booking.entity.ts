@@ -48,7 +48,7 @@ export default class Bookings {
   no_kontak_darurat_ketua: string;
 
   @Column({ type: 'json', nullable: true })
-  anggota: string;
+  anggota: JSON;
 
   @Column({ default: false })
   status: boolean;

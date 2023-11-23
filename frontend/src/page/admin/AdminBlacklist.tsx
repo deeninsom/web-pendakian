@@ -1,67 +1,66 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import LayoutAdmin from "./layout/LayoutAdmin"
 import axiosInstance from "../../api";
 
-const AdminVerifycationBooking = () => {
-  const [viewData, setViewData] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [viewDataById, setViewDataById] = useState<any>(null);
-  const [status, setStatus] = useState(false)
-  const [bookingId, setBookingId] = useState()
+export const AdminBlacklist = () => {
+  const [years, setYears] = useState([]);
+  const [blacklistData, setBlacklistData] = useState([])
+  const [formData, setFormData] = useState({
+    nik: '',
+    nama: '',
+    no_telepon: '',
+    bulan: 0,
+    tahun: ''
+  });
 
   useEffect(() => {
-    axiosInstance.get(`/bookings?search=${searchValue}&&filterDate=${selectedDate}&&status=0`)
+    axiosInstance.get("/blacklist")
       .then((response) => {
-        setViewData(response.data.data);
+        setBlacklistData(response.data.data)
       })
       .catch((error) => {
-        alert(`Error fetching booking data: ${error}`)
+        alert(`Error fetching website status: ${error}`)
       });
-  }, [searchValue, selectedDate]);
+  })
 
   useEffect(() => {
-    const filteredData = viewData.filter((item: any) => {
-      return (
-        item.kode_booking.toLowerCase().includes(searchValue.toLowerCase()) ||
-        (selectedDate === "" || item.date === selectedDate)
-      );
-    });
-    setFilteredData(filteredData);
-  }, [searchValue, selectedDate, viewData]);
+    const currentYear = new Date().getFullYear();
 
-  const handleOpenModal = (bookingId: any) => {
-    axiosInstance.get(`/bookings/${bookingId}`)
-      .then((response: any) => {
-        setViewDataById(response.data.data)
-        setStatus(response.data.data.status)
-        setBookingId(bookingId)
-      })
-      .catch((error) => {
-        alert(`Error fetching booking: ${error}`)
-      });
-  };
+    const numberOfYears = 10;
 
-  const handleStatus = (event: any) => {
-    setStatus(event.target.checked);
-  };
+    const yearArray: any = Array.from({ length: numberOfYears * 2 + 1 }, (_, index) => currentYear - numberOfYears + index);
 
-  const handleSubmitStatus = () => {
-    axiosInstance
-      .post("/bookings/set_status", {
-        booking_id: bookingId,
-        status: status,
-      })
-      .then(() => {
-        window.location.reload();
-      })
-      .catch((error) => {
-        alert(`Error update status booking: ${error}`)
-      });
-  };
+    setYears(yearArray);
+  }, []);
+
+  const addBlacklist = () => {
+    // if(formData.bulan < 10 ){
+    //   formData.bulan =  '0' + formData.bulan 
+    // }
+    // // if(formData.bulan.charAt(0) !== '0'){
+    // // }else {
+    // //   formData.bulan = `${formData.bulan}`
+    // // }
+    // // console.log(formData)
+    // const date = formData.bulan + '0'
+    // const result = `0` + date
+    // console.log(date)
+    // axiosInstance.post("/blacklist", {
+    //   nik: formData.nik,
+    //   nama: formData.nama,
+    //   no_telepon: formData.no_telepon,
+    //   dibuat: '',
+    //   berakhir: ''
+    // })
+    //   .then((response) => {
+    //     setBlacklistData(response.data.data)
+    //   })
+    //   .catch((error) => {
+    //     alert(`Error fetching website status: ${error}`)
+    //   });
+  }
+
   return (
     <LayoutAdmin>
       <div className="tabel-booking mb-4">
@@ -69,64 +68,131 @@ const AdminVerifycationBooking = () => {
         <div className="input-group">
           <div className="form-outline d-flex gap-2">
             <div className="input-group mb-3">
-              <input type="search" className="form-control" placeholder="Cari kode booking" aria-label="Cari kode booking" aria-describedby="basic-addon1"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+              <input type="search" className="form-control" placeholder="Cari berdasarkan NIK" aria-label="Cari kode booking" aria-describedby="basic-addon1"
+              // value={searchValue}
+              // onChange={(e) => setSearchValue(e.target.value)}
               />
               <span className="input-group-text" id="basic-addon1"><i className="fa fas-solid fa-search"></i></span>
             </div>
-            <div className="input-group mb-3">
-              <input type="date" className="form-control" placeholder="Cari kode booking" aria-label="Cari kode booking" aria-describedby="basic-addon1"
-                value={selectedDate}
-                onChange={(e) => {
-                  const inputValue = e.target.value;
-                  const parts = inputValue.split('/');
-                  if (parts.length === 3) {
-                    const newDate = `${parts[2]}-${parts[0]}-${parts[1]}`;
-                    setSelectedDate(newDate);
-                  } else {
-                    setSelectedDate(inputValue);
-                  }
-                }}
-              />
-            </div>
           </div>
         </div>
-        <span className="py-3 d-block">Data Booking: </span>
+        <div className="header d-flex justify-content-between align-items-center">
+          <span className="py-3 d-block">Data blacklist pendaki: </span>
+          <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addblacklist" style={{ fontSize: "12px" }}>tambah</button>
+        </div>
         <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-          <table className="table table-striped table-bordered" >
+          <table className="table table-bordered table-responsive table-striped" >
             <thead style={{ position: "sticky", top: 0 }}>
               <tr>
-                <th scope="col" style={{ width: "30%" }}>Kode Booking</th>
-                <th scope="col" style={{ textAlign: "center" }}>Tgl. Naik</th>
-                <th scope="col" style={{ textAlign: "center" }}>Tgl. Turun</th>
-                <th scope="col" style={{ textAlign: "center" }}>Status</th>
-                <th scope="col" style={{ textAlign: "center" }}>Aksi</th>
+                <th scope="col" style={{ width: "20%" }}>NIK</th>
+                <th scope="col" style={{ width: "32%" }}>Nama</th>
+                <th scope="col" style={{}}>No. Telepon</th>
+                <th scope="col" style={{}}>Dibuat</th>
+                <th scope="col" style={{}}>Berakhir</th>
               </tr>
             </thead>
             <tbody>
               {
-                filteredData.map((item: any, index) => (
+                blacklistData.map((val: any, index) => (
                   <tr key={index}>
-                    <td>{item.kode_booking}</td>
-                    <td style={{ textAlign: "center" }}>{item.tanggal_naik}</td>
-                    <td style={{ textAlign: "center" }}>{item.tanggal_turun}</td>
-                    <td style={{ textAlign: "center" }}>{item.status == false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Pengajuan</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Disetujui</span>}</td>
-                    <td style={{ textAlign: "center" }}><button onClick={() => handleOpenModal(item.id)} style={{ border: 0 }}> <i style={{ cursor: "pointer" }} data-bs-toggle="modal" data-bs-target="#exampleModal" className="fas fa-regular fa-pen-to-square"></i></button></td>
+                    <td>{val.nik}</td>
+                    <td>{val.nama}</td>
+                    <td>{val.no_telepon}</td>
+                    <td>{val.dibuat}</td>
+                    <td>{val.berakhir}</td>
                   </tr>
                 ))
               }
             </tbody>
           </table>
-          <div className="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-scrollable">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h1 className="modal-title fs-5" id="exampleModalLabel">Verifikasi data booking</h1>
-                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+
+      <div className="modal fade" id="addblacklist" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">Add blacklist</h1>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form action="">
+                <div className="form-group my-2">
+                  <label htmlFor="exampleInputEmail1">Masukan NIK</label>
+                  <input
+                    value={formData.nik}
+                    onChange={(e) => setFormData({ ...formData, nik: e.target.value })}
+                    type="text" className="form-control" id="exampleInputText" />
                 </div>
-                <div className="modal-body">
-                  {
+                <div className="form-group my-3">
+                  <label htmlFor="exampleInputPassword1">Nama</label>
+                  <input
+                    value={formData.nama}
+                    onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                    type="text" className="form-control" id="exampleInputText" />
+                </div>
+                <div className="form-group my-3">
+                  <label htmlFor="exampleInputPassword1">No. Telepon</label>
+                  <input
+                    value={formData.no_telepon}
+                    onChange={(e) => setFormData({ ...formData, no_telepon: e.target.value })}
+                    type="text" className="form-control" id="exampleInputText" />
+                </div>
+                <div className="form-group my-3">
+                  <label htmlFor="exampleInputPassword1">Periode Berakhir</label>
+                  <div className="d-flex gap-3 mt-2">
+                    <div className="form-group" style={{ width: "20%" }}>
+                      <select
+                        value={formData.bulan}
+                        onChange={(e) => setFormData({ ...formData, bulan: parseInt(e.target.value) })}
+                        className="form-control" id="exampleFormControlSelect1">
+                        <option>Bulan</option>
+                        <option value={1}>Jan</option>
+                        <option value={2}>Feb</option>
+                        <option value={3}>Mar</option>
+                        <option value={4}>Apr</option>
+                        <option value={5}>May</option>
+                        <option value={6}>Jun</option>
+                        <option value={7}>Jul</option>
+                        <option value={8}>Aug</option>
+                        <option value={9}>Sep</option>
+                        <option value={10}>Oct</option>
+                        <option value={11}>Nov</option>
+                        <option value={12}>Des</option>
+                      </select>
+                    </div>
+                    <div className="form-group" style={{ width: "20%" }}>
+                      <select
+                        value={formData.tahun}
+                        onChange={(e) => setFormData({ ...formData, tahun: e.target.value })}
+                        className="form-control" id="exampleFormControlSelect1">
+                        <option>Tahun</option>
+                        {years.map((year) => (
+                          <option key={year}>{year}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+              <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => addBlacklist()}>Tambahkan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="modal fade" id="detailblacklist" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">Detail blacklist</h1>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              {/* {
                     viewDataById && (
                       <ul style={{ listStyle: "none" }}>
                         <li className="d-flex">
@@ -237,8 +303,8 @@ const AdminVerifycationBooking = () => {
                         </li>
                       </ul>
                     )
-                  }
-                  <div className="isVerify mt-5">
+                  } */}
+              {/* <div className="isVerify mt-5">
                     <span>Setujui Pengajuan Booking ? </span>
                     <div className="content-2 d-flex gap-2">
                       <div className="form-check">
@@ -260,13 +326,11 @@ const AdminVerifycationBooking = () => {
                         </label>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                  <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleSubmitStatus}>Ubah</button>
-                </div>
-              </div>
+                  </div> */}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+              <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Ubah</button>
             </div>
           </div>
         </div>
@@ -274,5 +338,3 @@ const AdminVerifycationBooking = () => {
     </LayoutAdmin>
   )
 }
-
-export default AdminVerifycationBooking

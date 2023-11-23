@@ -32,8 +32,6 @@ const AdminHistoryBooking = () => {
     setFilteredData(filteredData);
   }, [searchValue, viewData, selectedDate]);
 
-
-
   return (
     <LayoutAdmin>
       <div className="tabel-booking mb-4">
