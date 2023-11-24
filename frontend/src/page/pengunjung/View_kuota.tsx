@@ -4,14 +4,14 @@ import Layout from "./layout/Layout"
 import axiosInstance from "../../api"
 
 const View_kuota = () => {
-    const [kuota, setKuota] = useState([]);
+    const [kuota, setKuota]: any = useState([]);
     const [selectedDate, setSelectedDate] = useState(getCurrentMonthYear());
     const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
         axiosInstance.get(`/kuota?search=${selectedDate}`)
-            .then((response) => {
+            .then((response: any) => {
                 setKuota(response.data.data);
                 setLoading(false);
             })
@@ -63,7 +63,7 @@ const View_kuota = () => {
                                     </div>
                                 </div>
                             ) : kuota.length > 0 ?
-                                kuota.map((item: any, index) => (
+                                kuota.map((item: any, index: any) => (
                                     <tr key={index} style={{ textAlign: "center" }}>
                                         <td>{item.tanggal}</td>
                                         <td>{item.kuota > 0 ? <span style={{ color: "green" }}>{item.kuota}</span> : <span style={{ color: "red" }}>{item.kuota}</span>}</td>

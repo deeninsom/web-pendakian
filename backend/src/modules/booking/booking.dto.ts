@@ -5,6 +5,9 @@ export class AnggotaDTO {
     nama: string;
 
     @ApiProperty()
+    no_identitas_anggota: string;
+
+    @ApiProperty()
     no_telepone: string;
 
     @ApiProperty()

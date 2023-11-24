@@ -37,7 +37,7 @@ export class BookingService {
 
         const result = await this.bookingRepository.find({
             where: whereCondition,
-            order: {created_at: "DESC"}
+            order: { created_at: "DESC" }
         });
         return result
     }
@@ -75,10 +75,30 @@ export class BookingService {
             await this.kuotaRepository.save(findKuota)
         }
 
-        console.log(bookingDTO)
 
-        const createBooking = await this.bookingRepository.save(createPayload);
-        return createBooking
+        const checkKetua = await this.checkBlacklist(bookingDTO.no_identitas_ketua)
+        if (checkKetua) {
+            throw new HttpException(
+                `Ketua with name ${bookingDTO.nama_ketua} is blacklisted`,
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+
+        const dataAnggota: any = bookingDTO.anggota
+
+        for (const anggota of dataAnggota) {
+            const checkAnggota = await this.checkBlacklist(anggota.no_identitas_anggota)
+
+            if (checkAnggota) {
+                throw new HttpException(
+                    `Anggota with name ${anggota.nama} is blacklisted`,
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+
+            const createBooking = await this.bookingRepository.save(createPayload);
+            return createBooking
+        }
     }
 
     async update(id: string, payload: any): Promise<Bookings> {
@@ -130,7 +150,7 @@ export class BookingService {
         return findBooking
     }
 
-    async handleImagePayment (payload: any){
+    async handleImagePayment(payload: any) {
         const findBooking = await this.bookingRepository.findOne({
             where: {
                 id: payload.booking_id
@@ -138,7 +158,7 @@ export class BookingService {
         });
         if (!findBooking) throw new HttpException(`Booking dengan id ${payload.booking_id} tidak ditemukan !`, HttpStatus.NOT_FOUND)
 
-        
+
         findBooking.bukti_pembayaran = payload.bukti_pembayaran
         await this.bookingRepository.update(findBooking.id, findBooking);
 
@@ -149,4 +169,18 @@ export class BookingService {
         const data = await this.bookingRepository.delete({ created_at: LessThan(date) });
         console.log(data)
     }
+
+    private async checkBlacklist(id: string): Promise<boolean> {
+        if (!id) {
+          return true;
+        }
+      
+        const isBlacklisted = await this.blacklistRepository.findOne({
+          where: {
+            nik: id,
+          },
+        });
+      
+        return !!isBlacklisted; 
+      }
 }

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+// import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Bookings from './modules/booking/booking.entity';
 import { BookingModule } from './modules/booking/booking.module';
@@ -20,13 +20,13 @@ import { BlacklistModule } from './modules/blacklist/blacklist.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath:
-        process.env.NODE_ENV === 'Production'
-          ? '.env.production'
-          : '.env.development',
-    }),
+    // ConfigModule.forRoot({
+    //   isGlobal: true,
+    //   envFilePath:
+    //     process.env.NODE_ENV === 'Production'
+    //       ? '.env.production'
+    //       : '.env.development',
+    // }),
     MulterModule.register({
       storage: diskStorage({
         destination: './uploads',
@@ -42,11 +42,11 @@ import { BlacklistModule } from './modules/blacklist/blacklist.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DATABASE_HOST,
-      port: parseInt(process.env.DATABASE_PORT, 10),
-      username: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
+      host: '127.0.0.1',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'db_pendakian',
       synchronize: true,
       entities: [
         Bookings,

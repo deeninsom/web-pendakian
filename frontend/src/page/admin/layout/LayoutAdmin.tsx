@@ -12,7 +12,7 @@ const LayoutAdmin = ({ children }: { children: ReactNode }) => {
 
     const navigate = useNavigate()
 
-    const handlePage = (route: string) =>{
+    const handlePage = (route: string) => {
         navigate(route)
     }
     return (
@@ -25,24 +25,18 @@ const LayoutAdmin = ({ children }: { children: ReactNode }) => {
                                 <img src={logoPenangunggan} alt="Bootstrap" width="100" height="40" />
                             </a>
                             <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" style={{ marginLeft: "-24px", marginTop: "24px" }} id="menu">
-                                <li className="nav-item">
-                                    <a href="/admin/dashboard" className="nav-link align-middle px-0" style={{ color: "white" }}>
-                                        <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Dashboard</span>
-                                    </a>
+                                <li className="nav-item" style={{ cursor: "pointer" }}>
+                                    <i className="fa fa-solid fa-house"></i> <span className="ms-1 d-none d-sm-inline" onClick={() => handlePage("/admin/dashboard")}>Dashboard</span>
                                 </li>
-                                <li className="nav-item" style={{ marginTop: "-10px" }}>
-                                    <a href="/admin/verifycation_data" className="nav-link align-middle px-0" style={{ color: "white" }}>
-                                        <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Verifikasi</span>
-                                    </a>
+                                <li className="nav-item" style={{ marginTop: "20px", cursor: 'pointer' }}>
+                                    <i className="fa fa-solid fa-list-check"></i> <span className="ms-2 d-none d-sm-inline" onClick={() => handlePage("/admin/verifycation_data")}>Verifikasi</span>
                                 </li>
-                                <li className="nav-item" style={{ marginTop: "-10px" }}>
-                                    <a href="/admin/history_booking" className="nav-link align-middle px-0" style={{ color: "white" }}>
-                                        <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">History</span>
-                                    </a>
+                                <li className="nav-item" style={{ marginTop: "20px", cursor: 'pointer' }}>
+                                    <i className="fa fa-solid fa-clock-rotate-left"></i> <span className="ms-2 d-none d-sm-inline" onClick={() => handlePage("/admin/history_booking")}>History</span>
                                 </li>
-                                <li className="nav-item" style={{ marginTop: "9px" }}>
+                                <li className="nav-item" style={{ marginTop: "20px" }}>
                                     <div className="d-flex align-items-center justify-content-between">
-                                        <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Kelola</span>
+                                        <i className="fa fa-solid fa-gear"></i> <span className="d-none d-sm-inline" style={{marginLeft: "11px"}}>Kelola</span>
                                         {
                                             dropdown ? (
                                                 <i className="fa fa-solid fa-chevron-left" style={{ fontSize: "13px", fontWeight: "bold", marginLeft: "100px", cursor: "pointer" }} onClick={() => setDropdown(false)}></i>
@@ -53,7 +47,7 @@ const LayoutAdmin = ({ children }: { children: ReactNode }) => {
                                         dropdown && (
                                             <ul style={{ marginLeft: "-7px" }}>
                                                 <li style={{ listStyle: "none", marginTop: "3px", cursor: "pointer" }} onClick={() => handlePage("/admin/blacklist")}>
-                                                        <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Blacklist</span>
+                                                    <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Blacklist</span>
                                                 </li>
                                                 <li style={{ listStyle: "none", marginTop: "3px", cursor: "pointer" }} onClick={() => handlePage("/admin/setting")}>
                                                     <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Setting</span>
@@ -62,9 +56,9 @@ const LayoutAdmin = ({ children }: { children: ReactNode }) => {
                                         )
                                     }
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item" style={{ marginTop: "10px" }}>
                                     <a href="/login" className="nav-link align-middle px-0" style={{ color: "white" }}>
-                                        <i className="fs-4 bi-house"></i> <span className="ms-1 d-none d-sm-inline">Logout</span>
+                                        <i className="fa fa-solid fa-arrow-right-from-bracket"></i> <span className="ms-2 d-none d-sm-inline">Logout</span>
                                     </a>
                                 </li>
                             </ul>

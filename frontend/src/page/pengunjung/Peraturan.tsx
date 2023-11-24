@@ -156,43 +156,43 @@ const Peraturan = () => {
                     <div className="card rules-3">
                         <div className="card-body">
                             <ul style={{ listStyle: "none" }}>
-                                <li className="d-flex gap-2 my-2">
-                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                <li className="d-flex gap-2 my-2" >
+                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
                                         checked={checklist.buktiBooking}
                                         onChange={() => handleChecklistChange("buktiBooking")}
                                     />
                                     Menunjukkan Bukti Booking Online dengan Scan QRcode di pintu masuk (melalui Hp atau bukti cetak booking online).
                                 </li>
-                                <li className="d-flex gap-2 my-2">
-                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                <li className="d-flex gap-2 my-2" >
+                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
                                         checked={checklist.fotocopyKTP}
                                         onChange={() => handleChecklistChange("fotocopyKTP")}
                                     />
                                     Membawa Fotocopy KTP/KTM/ dan Paspor yang masih berlaku.
                                 </li>
-                                <li className="d-flex gap-2 my-2">
-                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                <li className="d-flex gap-2 my-2" >
+                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
                                         checked={checklist.sudahDivaksin}
                                         onChange={() => handleChecklistChange("sudahDivaksin")}
                                     />
                                     Sudah divaksin (minimal dosis pertama) dengan menunjukkan sertifikat vaksin atau swab antigen/pcr sesuai ketentuan.
                                 </li>
-                                <li className="d-flex gap-2 my-2">
-                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                <li className="d-flex gap-2 my-2" >
+                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
                                         checked={checklist.batasanUsia}
                                         onChange={() => handleChecklistChange("batasanUsia")}
                                     />
                                     Batasan usia pengunjung menyesuaikan peraturan pada masa pandemi Covid-19.
                                 </li>
-                                <li className="d-flex gap-2 my-2">
-                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                <li className="d-flex gap-2 my-2" >
+                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
                                         checked={checklist.mematuhiSOP}
                                         onChange={() => handleChecklistChange("mematuhiSOP")}
                                     />
                                     Mematuhi SOP Kunjungan di kawasan konservasi dan aturan pada masa Pandemi Covid (Menerapkan Protokol Kesehatan Ketat).
                                 </li>
-                                <li className="d-flex gap-2 my-2">
-                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                <li className="d-flex gap-2 my-2" >
+                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
                                         checked={checklist.gunakanAplikasi}
                                         onChange={() => handleChecklistChange("gunakanAplikasi")}
                                     />

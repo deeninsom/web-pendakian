@@ -46,7 +46,6 @@ export class BlacklistController {
             if (error instanceof HttpException) {
                 return res.status(error.getStatus()).json({ status: false, message: error.message });
             } else {
-                console.log(error)
                 return res.status(500).json({ status: false, message: 'Terjadi kesalahan server !', error: error.message });
             }
         }

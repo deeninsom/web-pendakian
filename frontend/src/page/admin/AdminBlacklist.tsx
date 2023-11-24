@@ -5,7 +5,7 @@ import axiosInstance from "../../api";
 
 export const AdminBlacklist = () => {
   const [years, setYears] = useState([]);
-  const [blacklistData, setBlacklistData] = useState([])
+  const [blacklistData, setBlacklistData]: any = useState([])
   const [formData, setFormData] = useState({
     nik: '',
     nama: '',
@@ -35,30 +35,25 @@ export const AdminBlacklist = () => {
   }, []);
 
   const addBlacklist = () => {
-    // if(formData.bulan < 10 ){
-    //   formData.bulan =  '0' + formData.bulan 
-    // }
-    // // if(formData.bulan.charAt(0) !== '0'){
-    // // }else {
-    // //   formData.bulan = `${formData.bulan}`
-    // // }
-    // // console.log(formData)
-    // const date = formData.bulan + '0'
-    // const result = `0` + date
-    // console.log(date)
-    // axiosInstance.post("/blacklist", {
-    //   nik: formData.nik,
-    //   nama: formData.nama,
-    //   no_telepon: formData.no_telepon,
-    //   dibuat: '',
-    //   berakhir: ''
-    // })
-    //   .then((response) => {
-    //     setBlacklistData(response.data.data)
-    //   })
-    //   .catch((error) => {
-    //     alert(`Error fetching website status: ${error}`)
-    //   });
+    const formattedMonth = formData.bulan < 10 ? `0${formData.bulan}` : `${formData.bulan}`;
+    const date = `${formData.tahun}-${formattedMonth}-01`;
+ 
+    const currentDate = new Date();
+    const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+
+    axiosInstance.post("/blacklist", {
+      nik: formData.nik,
+      nama: formData.nama,
+      no_telepon: formData.no_telepon,
+      dibuat: formattedCurrentDate,
+      berakhir: date
+    })
+      .then((response) => {
+        setBlacklistData([...blacklistData, response.data.data]);
+      })
+      .catch((error) => {
+        alert(`Error fetching website status: ${error}`)
+      });
   }
 
   return (
@@ -93,7 +88,7 @@ export const AdminBlacklist = () => {
             </thead>
             <tbody>
               {
-                blacklistData.map((val: any, index) => (
+                blacklistData.map((val: any, index: any) => (
                   <tr key={index}>
                     <td>{val.nik}</td>
                     <td>{val.nama}</td>

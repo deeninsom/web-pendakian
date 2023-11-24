@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 const Form_pendaftaran = () => {
   const navigate = useNavigate();
-
+  
   const initialMember = {
     nama: '',
-    noIdentitas: '',
+    no_identitas_anggota: '',
     noTelepone: '',
     alamat: '',
     jenisKelamin: ''
@@ -52,8 +52,10 @@ const Form_pendaftaran = () => {
         rombongan: totalParticipants
       })
       navigate(`/view_booking?search=${result.data.data.kode_booking}`);
-    } catch (error) {
-      alert(`Error send booking data: ${error}`)
+    } catch (error: any) {
+      if (error.response) {
+        alert(`Error: ${error.response.data.message}`)
+      }
     }
   }
 
@@ -257,10 +259,10 @@ const Form_pendaftaran = () => {
                     <div className="col-sm-2 my-2">
                       <label className="form-label">No. Identitas</label>
                       <input
-                        value={anggota.noIdentitas}
+                        value={anggota.no_identitas_anggota}
                         onChange={(e) => {
                           const updatedAnggota = [...formData.anggota];
-                          updatedAnggota[index].noIdentitas = e.target.value;
+                          updatedAnggota[index].no_identitas_anggota = e.target.value;
                           setFormData({ ...formData, anggota: updatedAnggota });
                         }}
                         type="text" className="form-control" />

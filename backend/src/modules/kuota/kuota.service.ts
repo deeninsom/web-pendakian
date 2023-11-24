@@ -12,15 +12,21 @@ export class KuotaService {
     ) { }
 
     async get(search: string) {
-        const whereCondition = search ? { tanggal: Like(`%${search}%`) } : {}
-        const result = await this.kuotaRepository.find({
-            where: whereCondition,
-            order: {created_at: "ASC"}
-        });
-        return result
-    }
+        const whereCondition: any = {}
 
-    async getId(id: string): Promise<KuotaDTO> {
+        if (search) {
+            whereCondition.tanggal = Like(`%${search}%`);
+        }
+
+        const data = await this.kuotaRepository.find({
+            where: whereCondition,
+            order: { created_at: "ASC" }
+        });
+        
+        return data;
+    }
+    
+    async getId(id: string){
         const findBooking = await this.kuotaRepository.findOne({
             where: { id }
         });
@@ -29,11 +35,36 @@ export class KuotaService {
     }
 
     async create(kuotaDTO: KuotaDTO): Promise<any> {
-        const createKuota = await this.kuotaRepository.save(kuotaDTO);
-        return createKuota
+        const payload: any = kuotaDTO
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const daysInMonth = new Date(currentYear, payload.month, 0).getDate();
+
+        const result = []
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const formattedDate = `${currentYear}-${payload.month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            const existingKuota = await this.kuotaRepository.findOne({
+              where: {
+                tanggal: formattedDate,
+              },
+            });
+      
+            if (!existingKuota) {
+              const newKuota = this.kuotaRepository.create({
+                tanggal: formattedDate,
+                kuota: 150, 
+              });
+      
+              const createKuota = await this.kuotaRepository.save(newKuota);
+              result.push(createKuota)
+            }
+          }
+
+          return result
     }
 
-    async update(id: string, payload: any): Promise<KuotaDTO> {
+    async update(id: string, payload: any) {
         const findBooking = await this.kuotaRepository.findOne({
             where: { id }
         });
