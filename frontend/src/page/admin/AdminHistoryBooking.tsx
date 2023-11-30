@@ -11,7 +11,7 @@ const AdminHistoryBooking = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
-    axiosInstance.get(`/bookings?search=${searchValue}&&filterDate=${selectedDate}`)
+    axiosInstance.get(`/bookings?search=${searchValue}&&status=1&&filterDate=${selectedDate}`)
       .then((response) => {
         setViewData(response.data.data);
       })
