@@ -84,9 +84,10 @@ const Form_pendaftaran = () => {
       formData.tanggalLahirKetua &&
       formData.jenisKelaminKetua &&
       formData.noKontakDaruratKetua
-
+      
     setIsKetuaComplete(isKetuaComplete);
   }, [formData]);
+
 
   const isAnggotaComplete = (anggotaData: any) => {
     return (

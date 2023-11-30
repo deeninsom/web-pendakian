@@ -137,7 +137,7 @@ const View_booking = () => {
                                             </div>
 
                                             <span className="mt-4 mb-2" style={{ display: "block" }}>Batalkan Booking ?</span>
-                                            <button className="btn btn-danger" onClick={() => bookingCanceled(booking.id)} style={{ fontSize: "10px", fontWeight: "bold" }}>Batal Booking</button>
+                                            <button className="btn btn-danger mb-5" onClick={() => bookingCanceled(booking.id)} style={{ fontSize: "10px", fontWeight: "bold" }}>Batal Booking</button>
                                         </>
                                     )
                                 }

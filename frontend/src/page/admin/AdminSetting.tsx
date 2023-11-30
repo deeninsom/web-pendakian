@@ -10,6 +10,7 @@ const AdminSetting = () => {
   const [formatDatetime, setFormatDatetime] = useState("")
   const [formData, setFormData] = useState({
     bulan: 0,
+    year: 0
   });
 
   useEffect(() => {
@@ -42,7 +43,8 @@ const AdminSetting = () => {
 
   const addKuota = () => {
     axiosInstance.post("/kuota", {
-      month: formData.bulan
+      month: formData.bulan,
+      year: formData.year
     })
       .then(() => {
         alert("Kuota Berhasil ditambahkan")
@@ -51,6 +53,10 @@ const AdminSetting = () => {
         alert(`Error fetching website status: ${error}`)
       });
   }
+
+  const currentYear = new Date().getFullYear();
+  const nextFiveYears = Array.from({ length: 6 }, (_, index) => currentYear + index );
+
 
   return (
     <LayoutAdmin>
@@ -80,8 +86,21 @@ const AdminSetting = () => {
           </div>
           <div className="card-body">
             <div className="form-group my-3">
-              <label htmlFor="exampleInputPassword1">Silahkan Pilih Bulan</label>
+              <label htmlFor="exampleInputPassword1">Generate Kuota</label>
               <div className="d-flex gap-3 mt-2">
+                <div className="form-group" style={{ width: "20%" }}>
+                  <select
+                    value={formData.year}
+                    onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
+                    className="form-control" id="exampleFormControlSelect1">
+                    <option>Tahun</option>
+                    {nextFiveYears.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="form-group" style={{ width: "20%" }}>
                   <select
                     value={formData.bulan}

@@ -22,11 +22,11 @@ export class KuotaService {
             where: whereCondition,
             order: { created_at: "ASC" }
         });
-        
+
         return data;
     }
-    
-    async getId(id: string){
+
+    async getId(id: string) {
         const findBooking = await this.kuotaRepository.findOne({
             where: { id }
         });
@@ -35,9 +35,18 @@ export class KuotaService {
     }
 
     async create(kuotaDTO: KuotaDTO): Promise<any> {
+        const findKuota = await this.kuotaRepository.find({
+            where: {
+                tanggal: Like(`%${kuotaDTO.year}-${kuotaDTO.month}%`)
+            }
+        })
+
+        if (findKuota.length > 0) {
+            throw new HttpException(`Kuota sudah ada !`, HttpStatus.CONFLICT)
+        }
+
         const payload: any = kuotaDTO
-        const currentDate = new Date();
-        const currentYear = currentDate.getFullYear();
+        const currentYear = payload.year;
         const daysInMonth = new Date(currentYear, payload.month, 0).getDate();
 
         const result = []
@@ -45,23 +54,23 @@ export class KuotaService {
         for (let day = 1; day <= daysInMonth; day++) {
             const formattedDate = `${currentYear}-${payload.month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
             const existingKuota = await this.kuotaRepository.findOne({
-              where: {
-                tanggal: formattedDate,
-              },
+                where: {
+                    tanggal: formattedDate,
+                },
             });
-      
-            if (!existingKuota) {
-              const newKuota = this.kuotaRepository.create({
-                tanggal: formattedDate,
-                kuota: 150, 
-              });
-      
-              const createKuota = await this.kuotaRepository.save(newKuota);
-              result.push(createKuota)
-            }
-          }
 
-          return result
+            if (!existingKuota) {
+                const newKuota = this.kuotaRepository.create({
+                    tanggal: formattedDate,
+                    kuota: 150,
+                });
+
+                const createKuota = await this.kuotaRepository.save(newKuota);
+                result.push(createKuota)
+            }
+        }
+
+        return result
     }
 
     async update(id: string, payload: any) {

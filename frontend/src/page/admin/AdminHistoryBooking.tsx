@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import LayoutAdmin from "./layout/LayoutAdmin"
 import axiosInstance from "../../api";
-import moment from "moment";
-import 'moment/locale/id';
 
 const AdminHistoryBooking = () => {
   const [viewData, setViewData] = useState([]);
@@ -13,7 +11,7 @@ const AdminHistoryBooking = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
-    axiosInstance.get(`/bookings?search=${searchValue}&&status=1&&filterDate=${selectedDate}`)
+    axiosInstance.get(`/bookings?search=${searchValue}&&filterDate=${selectedDate}`)
       .then((response) => {
         setViewData(response.data.data);
       })
@@ -23,13 +21,38 @@ const AdminHistoryBooking = () => {
   }, [searchValue, selectedDate]);
 
   useEffect(() => {
-    const filteredData = viewData.filter((item: any) => {
+    const filtered = viewData.filter((item: any) => {
       return (
         item.kode_booking.toLowerCase().includes(searchValue.toLowerCase()) ||
         (selectedDate === "" || item.tanggal_naik === selectedDate)
       );
     });
-    setFilteredData(filteredData);
+
+    const data: any = [];
+
+    filtered.forEach((val: any) => {
+      const result = {
+        kode_booking: val.kode_booking,
+        nama: val.nama_ketua,
+        nik: val.no_identitas_ketua,
+        alamat: val.alamat_ketua,
+      };
+  
+      data.push(result);
+  
+      val.anggota.forEach((anggota: any) => {
+        const anggotaResult = {
+          kode_booking: result.kode_booking,
+          nama: anggota.nama,
+          nik: anggota.no_identitas_anggota,
+          alamat: anggota.alamat,
+        };
+  
+        data.push(anggotaResult);
+      });
+    });
+
+    setFilteredData(data);
   }, [searchValue, viewData, selectedDate]);
 
   return (
@@ -68,21 +91,19 @@ const AdminHistoryBooking = () => {
             <thead style={{ position: "sticky", top: 0 }}>
               <tr>
                 <th scope="col" style={{ width: "30%" }}>Kode Booking</th>
-                <th scope="col" style={{ textAlign: "center" }}>Tgl. Naik</th>
-                <th scope="col" style={{ textAlign: "center" }}>Tgl. Turun</th>
-                <th scope="col" style={{ textAlign: "center" }}>Dibuat</th>
-                <th scope="col" style={{ textAlign: "center" }}>Status</th>
+                <th scope="col" style={{ textAlign: "center" }}>Nama</th>
+                <th scope="col" style={{ textAlign: "center" }}>Nik</th>
+                <th scope="col" style={{ textAlign: "center" }}>Alamat</th>
               </tr>
             </thead>
             <tbody>
               {
-                filteredData.map((item: any, index) => (
+                filteredData.map((item: any, index: any) => (
                   <tr key={index}>
                     <td>{item.kode_booking}</td>
-                    <td style={{ textAlign: "center" }}>{item.tanggal_naik}</td>
-                    <td style={{ textAlign: "center" }}>{item.tanggal_turun}</td>
-                    <td style={{ textAlign: "center" }}>{moment(item.created_at).startOf('hour').fromNow()}</td>
-                    <td style={{ textAlign: "center" }}>{item.status == false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Pengajuan</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Disetujui</span>}</td>
+                    <td style={{ textAlign: "center" }}>{item.nama}</td>
+                    <td style={{ textAlign: "center" }}>{item.nik}</td>
+                    <td style={{ textAlign: "center" }}>{item.alamat}</td>
                   </tr>
                 ))
               }

@@ -71,6 +71,7 @@ export class BookingService {
                     HttpStatus.BAD_REQUEST,
                 );
             }
+
             findKuota.kuota = findKuota.kuota - 1
             await this.kuotaRepository.save(findKuota)
         }

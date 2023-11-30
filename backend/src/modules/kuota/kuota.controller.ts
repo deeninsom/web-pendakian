@@ -13,7 +13,7 @@ export class KuotaController {
     async get(@Res() res: Response, @Query('search') search: string) {
         try {
             const data = await this.kuotaService.get(search)
-            return res.status(200).json({ message: "Berhasil menampilkan booking", data })
+            return res.status(200).json({ message: "Berhasil menampilkan kuota", data })
         } catch (error) {
             if (error instanceof HttpException) {
                 return res.status(error.getStatus()).json({ status: false, message: error.message });
@@ -27,7 +27,7 @@ export class KuotaController {
     async getId(@Param('id') id: string, @Res() res: Response) {
         try {
             const data = await this.kuotaService.getId(id)
-            return res.status(200).json({ message: "Berhasil menampilkan booking", data })
+            return res.status(200).json({ message: "Berhasil menampilkan kuota", data })
         } catch (error) {
             if (error instanceof HttpException) {
                 return res.status(error.getStatus()).json({ status: false, message: error.message });
@@ -42,12 +42,11 @@ export class KuotaController {
         try {
             const datas: any = payload
             const data = await this.kuotaService.create(datas);
-            return res.status(200).json({ message: "Berhasil menambahkan booking", data });
+            return res.status(200).json({ message: "Berhasil menambahkan kuota", data });
         } catch (error) {
             if (error instanceof HttpException) {
                 return res.status(error.getStatus()).json({ status: false, message: error.message });
             } else {
-                console.log(error)
                 return res.status(500).json({ status: false, message: 'Terjadi kesalahan server !', error: error.message });
             }
         }
@@ -75,7 +74,7 @@ export class KuotaController {
     async update(@Param('id') id: string, @Body() payload: any, @Res() res: Response) {
         try {
             const data = await this.kuotaService.update(id, payload)
-            return res.status(200).json({ message: "Berhasil memperbarui booking", data })
+            return res.status(200).json({ message: "Berhasil memperbarui kuota", data })
         } catch (error) {
             if (error instanceof HttpException) {
                 return res.status(error.getStatus()).json({ status: false, message: error.message });
@@ -89,7 +88,7 @@ export class KuotaController {
     async delete(@Param('id') id: string, @Res() res: Response) {
         try {
             await this.kuotaService.delete(id)
-            return res.status(200).json({ message: "Berhasil menghapus booking", data: {} })
+            return res.status(200).json({ message: "Berhasil menghapus kuota", data: {} })
         } catch (error) {
             if (error instanceof HttpException) {
                 return res.status(error.getStatus()).json({ status: false, message: error.message });

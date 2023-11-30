@@ -13,8 +13,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
   };
   return (
     <>
-      <nav className="navbar navbar-expand-lg position-fixed w-100 z-3">
-        <div className="container" style={{backgroundColor: "gray", opacity: "90%", borderRadius: "20px", padding: "10px"}}>
+      <nav className="navbar navbar-expand-lg position-fixed w-100 z-3" style={{paddingLeft: "40px", paddingRight: "40px"}}>
+        <div className="container-fluid" style={{backgroundColor: "gray", opacity: "90%", borderRadius: "20px"}}>
           <a className="navbar-brand" href="/">
             <img src={logoPenangunggan} alt="Bootstrap" width="100" height="40" />
           </a>

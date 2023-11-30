@@ -25,7 +25,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Assesment Test Havedev')
+    .setTitle('DOCS API WEB PENDAKIAN')
     .setDescription('Base url: /api/v1')
     .setVersion('1.0')
     .build();
