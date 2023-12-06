@@ -13,6 +13,7 @@ export class BookingController {
     async get(@Res() res: Response, @Query('search') search: string, @Query('filterDate') filterDate: string, @Query('status') status: string) {
         try {
             const data = await this.bookingService.get(search, filterDate, status)
+            // console.log(data)
             return res.status(200).json({ message: "Berhasil menampilkan booking", data })
         } catch (error) {
             if (error instanceof HttpException) {

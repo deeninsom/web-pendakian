@@ -78,6 +78,7 @@ export class BookingService {
 
 
         const checkKetua = await this.checkBlacklist(bookingDTO.no_identitas_ketua)
+
         if (checkKetua) {
             throw new HttpException(
                 `Ketua with name ${bookingDTO.nama_ketua} is blacklisted`,
@@ -88,17 +89,19 @@ export class BookingService {
         const dataAnggota: any = bookingDTO.anggota
 
         for (const anggota of dataAnggota) {
+            // console.log(anggota)
             const checkAnggota = await this.checkBlacklist(anggota.no_identitas_anggota)
+            console.log(checkAnggota)
 
-            if (checkAnggota) {
+            if (!checkAnggota) {
+                const createBooking = await this.bookingRepository.save(createPayload);
+                return createBooking
+            }else{
                 throw new HttpException(
                     `Anggota with name ${anggota.nama} is blacklisted`,
                     HttpStatus.BAD_REQUEST,
                 );
             }
-
-            const createBooking = await this.bookingRepository.save(createPayload);
-            return createBooking
         }
     }
 
@@ -173,15 +176,19 @@ export class BookingService {
 
     private async checkBlacklist(id: string): Promise<boolean> {
         if (!id) {
-          return true;
+            return false;
         }
-      
-        const isBlacklisted = await this.blacklistRepository.findOne({
-          where: {
-            nik: id,
-          },
+
+        const isBlacklisted: any = await this.blacklistRepository.findOne({
+            where: {
+                nik: Like(`${id}`),
+            },
         });
-      
-        return !!isBlacklisted; 
-      }
+
+        if (!isBlacklisted) {
+            return false
+        }
+
+        return true;
+    }
 }
