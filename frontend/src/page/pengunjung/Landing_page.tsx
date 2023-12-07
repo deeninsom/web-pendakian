@@ -13,7 +13,7 @@ const Landing_page = () => {
 
     const [status, setStatus] = useState(false)
     useEffect(() => {
-        axiosInstance.get("/website/a0dcabc3-0dbc-4550-bc77-f518b30fefa9")
+        axiosInstance.get("/website/15f18c73-b16f-4bef-9c39-6e2b031c9c72")
             .then((response) => {
                 if (response.data.data.status_pendaftaran == true) {
                     setStatus(true)

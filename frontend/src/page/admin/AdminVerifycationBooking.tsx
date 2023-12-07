@@ -198,7 +198,7 @@ const AdminVerifycationBooking = () => {
                           <div style={{ width: "40%" }}>Anggota</div>
                         </li>
                         {
-                          viewDataById.anggota.map((value: any, index: any) => (
+                          viewDataById.anggota && viewDataById.anggota.map((value: any, index: any) => (
                             <ul key={index}>
                               <li className="d-flex">
                                 <div className="me-2">{index + 1}.</div>
