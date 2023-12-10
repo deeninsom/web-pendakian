@@ -8,8 +8,8 @@ import {
 
 @Entity()
 export default class Websites {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({ type: 'boolean', default: false })
   status_pendaftaran: boolean;

@@ -1,34 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from "react";
 import Layout from "./layout/Layout"
 import { useNavigate } from "react-router-dom";
 
 const Peraturan = () => {
-    const [checklist, setChecklist] = useState({
-        buktiBooking: false,
-        fotocopyKTP: false,
-        sudahDivaksin: false,
-        batasanUsia: false,
-        mematuhiSOP: false,
-        gunakanAplikasi: false,
-    });
     const navigate = useNavigate()
-
-    const handleChecklistChange = (item: keyof typeof checklist) => {
-        setChecklist({
-            ...checklist,
-            [item]: !checklist[item],
-        });
-    };
-
-    const isChecklistComplete =
-        checklist.buktiBooking &&
-        checklist.fotocopyKTP &&
-        checklist.sudahDivaksin &&
-        checklist.batasanUsia &&
-        checklist.mematuhiSOP &&
-        checklist.gunakanAplikasi;
 
     const switchPage = () => {
         navigate("/form_pendaftaran")
@@ -157,45 +133,27 @@ const Peraturan = () => {
                         <div className="card-body">
                             <ul style={{ listStyle: "none" }}>
                                 <li className="d-flex gap-2 my-2" >
-                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
-                                        checked={checklist.buktiBooking}
-                                        onChange={() => handleChecklistChange("buktiBooking")}
-                                    />
+                                    <i className="fa fa-solid fa-check"></i>
                                     Menunjukkan Bukti Booking Online dengan Scan QRcode di pintu masuk (melalui Hp atau bukti cetak booking online).
                                 </li>
                                 <li className="d-flex gap-2 my-2" >
-                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
-                                        checked={checklist.fotocopyKTP}
-                                        onChange={() => handleChecklistChange("fotocopyKTP")}
-                                    />
+                                    <i className="fa fa-solid fa-check"></i>
                                     Membawa Fotocopy KTP/KTM/ dan Paspor yang masih berlaku.
                                 </li>
                                 <li className="d-flex gap-2 my-2" >
-                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
-                                        checked={checklist.sudahDivaksin}
-                                        onChange={() => handleChecklistChange("sudahDivaksin")}
-                                    />
+                                    <i className="fa fa-solid fa-check"></i>
                                     Sudah divaksin (minimal dosis pertama) dengan menunjukkan sertifikat vaksin atau swab antigen/pcr sesuai ketentuan.
                                 </li>
                                 <li className="d-flex gap-2 my-2" >
-                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
-                                        checked={checklist.batasanUsia}
-                                        onChange={() => handleChecklistChange("batasanUsia")}
-                                    />
+                                    <i className="fa fa-solid fa-check"></i>
                                     Batasan usia pengunjung menyesuaikan peraturan pada masa pandemi Covid-19.
                                 </li>
                                 <li className="d-flex gap-2 my-2" >
-                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
-                                        checked={checklist.mematuhiSOP}
-                                        onChange={() => handleChecklistChange("mematuhiSOP")}
-                                    />
+                                    <i className="fa fa-solid fa-check"></i>
                                     Mematuhi SOP Kunjungan di kawasan konservasi dan aturan pada masa Pandemi Covid (Menerapkan Protokol Kesehatan Ketat).
                                 </li>
                                 <li className="d-flex gap-2 my-2" >
-                                    <input className="form-check-input" type="checkbox" style={{cursor: "pointer"}} value="" id="flexCheckDefault"
-                                        checked={checklist.gunakanAplikasi}
-                                        onChange={() => handleChecklistChange("gunakanAplikasi")}
-                                    />
+                                    <i className="fa fa-solid fa-check"></i>
                                     Menggunakan aplikasi Peduli Lindungi untuk cek status vaksin.
                                 </li>
                             </ul>
@@ -205,7 +163,7 @@ const Peraturan = () => {
                     <span className="my-3" style={{ display: "block", color: "red" }}>Segala persyaratan yang diisi wajib dipertanggungjawabkan, jika tidak sesuai/tidak lengkap tidak diberikan ijin melakukan wisata bromo, dan uang yang sudah ditransfer tidak dapat diambil kembali.</span>
                     <span className="my-3" style={{ display: "block", color: "grey", fontStyle: "italic" }}>Anda memahami, menyetujui, syarat dan ketentuan-ketentuan di atas, silakan isi checklist persyaratan diatas dan klik button daftar.</span>
                     <div className="click d-flex justify-content-center">
-                        <button className="btn btn-primary" style={{ border: "none" }} disabled={!isChecklistComplete} onClick={switchPage}>Daftar</button>
+                        <button className="btn btn-primary" style={{ border: "none" }} onClick={switchPage}>Daftar</button>
                     </div>
                 </div>
             </div>

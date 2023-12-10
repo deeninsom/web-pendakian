@@ -1,3 +1,4 @@
+import { IsOptional } from "@nestjs/class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class AnggotaDTO {
@@ -63,5 +64,9 @@ export class BookingDTO {
 
     @ApiProperty()
     rombongan: number;
+
+    @ApiProperty()
+    @IsOptional()
+    total_hari: number;
 }
 

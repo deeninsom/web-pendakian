@@ -68,6 +68,10 @@ export default class Bookings {
   @Column({ nullable: true })
   bukti_pembayaran: string;
 
+  @Column()
+  total_hari: number;
+
+
   @CreateDateColumn()
   public created_at: Date;
 

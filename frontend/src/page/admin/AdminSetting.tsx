@@ -14,7 +14,7 @@ const AdminSetting = () => {
   });
 
   useEffect(() => {
-    axiosInstance.get("/website/a0dcabc3-0dbc-4550-bc77-f518b30fefa9")
+    axiosInstance.get("/website/1")
       .then((response) => {
         const dateTime = moment(response.data.data).format('YYYY-MM-DD HH:mm:ss')
         setFormatDatetime(dateTime)
@@ -30,7 +30,7 @@ const AdminSetting = () => {
   })
 
   const closeBooking = (inputStatus: boolean) => {
-    axiosInstance.put("/website/a0dcabc3-0dbc-4550-bc77-f518b30fefa9", {
+    axiosInstance.put("/website/1", {
       status_pendaftaran: inputStatus
     })
       .then(() => {

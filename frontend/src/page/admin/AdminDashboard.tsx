@@ -141,6 +141,7 @@ const AdminDashboard = () => {
                 <th scope="col" style={{ textAlign: "center" }}>Status</th>
                 <th scope="col" style={{ textAlign: "center" }}>Naik</th>
                 <th scope="col" style={{ textAlign: "center" }}>Turun</th>
+                <th scope="col" style={{ textAlign: "center" }}>Total Hari</th>
                 <th scope="col" style={{ textAlign: "center" }}>Action</th>
               </tr>
             </thead>
@@ -152,6 +153,7 @@ const AdminDashboard = () => {
                     <td style={{ textAlign: "center" }}>{item.status == false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Pengajuan</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Disetujui</span>}</td>
                     <td style={{ textAlign: "center" }}>{item.naik === false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Tidak</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Ya</span>}</td>
                     <td style={{ textAlign: "center" }}>{item.turun == false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Tidak</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Ya</span>}</td>
+                    <td className="text-center">0</td>
                     <td style={{ textAlign: "center" }}><button onClick={() => handleOpenModal(item.id)} style={{ border: 0 }}> <i style={{ cursor: "pointer" }} data-bs-toggle="modal" data-bs-target="#exampleModal" className="fas fa-regular fa-pen-to-square"></i></button></td>
                   </tr>
                 ))

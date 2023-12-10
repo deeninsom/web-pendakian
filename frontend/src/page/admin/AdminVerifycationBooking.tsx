@@ -31,6 +31,7 @@ const AdminVerifycationBooking = () => {
       );
     });
     setFilteredData(filteredData);
+    console.log(selectedDate)
   }, [searchValue, selectedDate, viewData]);
 
   const handleOpenModal = (bookingId: any) => {
@@ -100,6 +101,7 @@ const AdminVerifycationBooking = () => {
                 <th scope="col" style={{ width: "30%" }}>Kode Booking</th>
                 <th scope="col" style={{ textAlign: "center" }}>Tgl. Naik</th>
                 <th scope="col" style={{ textAlign: "center" }}>Tgl. Turun</th>
+                <th scope="col" style={{ textAlign: "center" }}>Total Hari</th>
                 <th scope="col" style={{ textAlign: "center" }}>Status</th>
                 <th scope="col" style={{ textAlign: "center" }}>Aksi</th>
               </tr>
@@ -111,6 +113,7 @@ const AdminVerifycationBooking = () => {
                     <td>{item.kode_booking}</td>
                     <td style={{ textAlign: "center" }}>{item.tanggal_naik}</td>
                     <td style={{ textAlign: "center" }}>{item.tanggal_turun}</td>
+                    <td style={{ textAlign: "center" }}>{item.total_hari}</td>
                     <td style={{ textAlign: "center" }}>{item.status == false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Pengajuan</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Disetujui</span>}</td>
                     <td style={{ textAlign: "center" }}><button onClick={() => handleOpenModal(item.id)} style={{ border: 0 }}> <i style={{ cursor: "pointer" }} data-bs-toggle="modal" data-bs-target="#exampleModal" className="fas fa-regular fa-pen-to-square"></i></button></td>
                   </tr>

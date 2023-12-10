@@ -17,9 +17,11 @@ export class WebsiteService {
         return result
     }
 
-    async getId(id: string): Promise<any> {
+    async getId(id: number): Promise<any> {
         const findWebsite = await this.websiteRepository.findOne({
-            where: { id }
+            where: {
+                id: id
+            }
         });
         if (!findWebsite) throw new HttpException(`Website dengan id ${id} tidak ditemukan !`, HttpStatus.NOT_FOUND)
         return findWebsite
@@ -31,9 +33,11 @@ export class WebsiteService {
         return createKuota
     }
 
-    async update(id: string, payload: any): Promise<WebsiteDTO> {
+    async update(id: number, payload: any): Promise<WebsiteDTO> {
         const findWebsite = await this.websiteRepository.findOne({
-            where: { id }
+            where: {
+                id: id
+            }
         });
         if (!findWebsite) throw new HttpException(`Website dengan id ${id} tidak ditemukan !`, HttpStatus.NOT_FOUND)
 
@@ -41,9 +45,11 @@ export class WebsiteService {
         return await this.websiteRepository.findOne({ where: { id: findWebsite.id } })
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(id: number): Promise<void> {
         const findWebsite = await this.websiteRepository.findOne({
-            where: { id: id }
+            where: { 
+                id: id 
+            }
         });
         if (!findWebsite) throw new HttpException(`Website dengan id ${id} tidak ditemukan !`, HttpStatus.NOT_FOUND)
 

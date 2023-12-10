@@ -24,7 +24,7 @@ export class WebsiteController {
     }
 
     @Get(':id')
-    async getId(@Param('id') id: string, @Res() res: Response) {
+    async getId(@Param('id') id: number, @Res() res: Response) {
         try {
             const data = await this.websiteService.getId(id)
             return res.status(200).json({ message: "Berhasil menampilkan booking", data })
@@ -54,7 +54,7 @@ export class WebsiteController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() payload: WebsiteDTO, @Res() res: Response) {
+    async update(@Param('id') id: number, @Body() payload: WebsiteDTO, @Res() res: Response) {
         try {
             const data = await this.websiteService.update(id, payload)
             return res.status(200).json({ message: "Berhasil memperbarui booking", data })
@@ -68,7 +68,7 @@ export class WebsiteController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: string, @Res() res: Response) {
+    async delete(@Param('id') id: number, @Res() res: Response) {
         try {
             await this.websiteService.delete(id)
             return res.status(200).json({ message: "Berhasil menghapus booking", data: {} })

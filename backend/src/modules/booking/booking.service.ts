@@ -6,6 +6,7 @@ import { BookingDTO } from './booking.dto';
 import { LessThan } from 'typeorm';
 import Kuotas from '../kuota/kuota.entity';
 import Blacklists from '../blacklist/blacklist.entity';
+import * as moment from 'moment';
 
 @Injectable()
 export class BookingService {
@@ -57,6 +58,11 @@ export class BookingService {
         const newKodeBooking = `PNG-${formattedDate}-${randomDigits}`;
 
         bookingDTO.kode_booking = newKodeBooking
+        const tanggalNaik : any= new Date(bookingDTO.tanggal_naik)
+        const tanggalTurun : any= new Date(bookingDTO.tanggal_turun)
+        const selisihHari = Math.floor((tanggalTurun - tanggalNaik) / (1000 * 60 * 60 * 24));
+
+        bookingDTO.total_hari = selisihHari
         const createPayload = this.bookingRepository.create(bookingDTO)
         const findKuota = await this.kuotaRepository.findOne({
             where: {
@@ -76,7 +82,6 @@ export class BookingService {
             await this.kuotaRepository.save(findKuota)
         }
 
-
         const checkKetua = await this.checkBlacklist(bookingDTO.no_identitas_ketua)
 
         if (checkKetua) {
@@ -89,14 +94,13 @@ export class BookingService {
         const dataAnggota: any = bookingDTO.anggota
 
         for (const anggota of dataAnggota) {
-            // console.log(anggota)
+
             const checkAnggota = await this.checkBlacklist(anggota.no_identitas_anggota)
-            console.log(checkAnggota)
 
             if (!checkAnggota) {
                 const createBooking = await this.bookingRepository.save(createPayload);
                 return createBooking
-            }else{
+            } else {
                 throw new HttpException(
                     `Anggota with name ${anggota.nama} is blacklisted`,
                     HttpStatus.BAD_REQUEST,
