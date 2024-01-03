@@ -155,7 +155,9 @@ const Form_pendaftaran = () => {
                   <input
                     value={formData.tanggalBerangkat}
                     onChange={(e) => setFormData({ ...formData, tanggalBerangkat: e.target.value })}
-                    type="date" className="form-control" id="date" />
+                    type="date" className="form-control" id="date"
+                    min={new Date().toISOString().split('T')[0]}
+                  />
                 </div>
               </div>
               <div className="col-md-6 my-2">
@@ -164,7 +166,9 @@ const Form_pendaftaran = () => {
                   <input
                     value={formData.tanggalPulang}
                     onChange={(e) => setFormData({ ...formData, tanggalPulang: e.target.value })}
-                    type="date" className="form-control" id="date" />
+                    type="date" className="form-control" id="date"
+                    min={new Date().toISOString().split('T')[0]}
+                  />
                 </div>
               </div>
             </div>

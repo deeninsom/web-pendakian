@@ -18,7 +18,6 @@ const View_booking = () => {
         setSelectedFile(event.target.files[0]);
     };
 
-
     useEffect(() => {
         axiosInstance.get(`/bookings?search=${searchValue}`)
             .then((response) => {
@@ -65,6 +64,41 @@ const View_booking = () => {
                 alert(`Error fetching remove booking: ${error}`)
             });
     }
+
+    const [countdown, setCountdown]: any = useState(0);
+
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const currentTime = new Date().getTime();
+            const bookingTime = new Date(bookingData[0]?.created_at).getTime() + 1 * 60 * 1000;// Tambahkan waktu yang diinginkan di sini
+            const difference = bookingTime - currentTime;
+
+            if (difference > 0) {
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+
+                setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+            } else {
+                setCountdown("Booking expired");
+                clearInterval(intervalId);
+
+                const bookingId = bookingData[0]?.id; 
+                axiosInstance
+                    .delete(`/bookings/${bookingId}`)
+                    .then(() => {
+                        navigate("/")
+                    })
+                    .catch((error) => {
+                        alert(`Error removing booking: ${error}`)
+                    });
+            }
+        }, 1000);
+
+        return () => clearInterval(intervalId); // Membersihkan interval saat komponen di-unmount
+    }, [bookingData, navigate]);
 
     return (
         <Layout>
@@ -135,7 +169,12 @@ const View_booking = () => {
                                                     <button className="btn btn-primary ms-3" onClick={() => handleUpload(booking.id)} style={{ fontSize: "10px", height: "30px", fontWeight: "bold" }}>Kirim</button>
                                                 </div>
                                             </div>
-
+                                            <label style={{ fontWeight: "bold", marginTop: "20PX" }}>Booking akan terhapus otomatis jika tidak melakukan pembayaran 1X24 jam</label>
+                                            <div className="d-flex align-items-center">
+                                                <div className="col-md-2 my-1">Waktu Tersisa</div>
+                                                <div className="col-md-4 my-2">:</div>
+                                                <div className="col-md-4 my-2">{countdown}</div>
+                                            </div>
                                             <span className="mt-4 mb-2" style={{ display: "block" }}>Batalkan Booking ?</span>
                                             <button className="btn btn-danger mb-5" onClick={() => bookingCanceled(booking.id)} style={{ fontSize: "10px", fontWeight: "bold" }}>Batal Booking</button>
                                         </>
