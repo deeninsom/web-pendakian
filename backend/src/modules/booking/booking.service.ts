@@ -137,8 +137,7 @@ export class BookingService {
         });
         if (!findBooking) throw new HttpException(`Booking dengan id ${payload.booking_id} tidak ditemukan !`, HttpStatus.NOT_FOUND)
 
-        findBooking.naik = payload.naik
-        findBooking.turun = payload.turun
+        findBooking.status_pendakian = payload.status_pendakian
         await this.bookingRepository.update(findBooking.id, findBooking);
 
         return findBooking

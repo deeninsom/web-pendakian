@@ -31,7 +31,6 @@ const AdminVerifycationBooking = () => {
       );
     });
     setFilteredData(filteredData);
-    console.log(selectedDate)
   }, [searchValue, selectedDate, viewData]);
 
   const handleOpenModal = (bookingId: any) => {
@@ -266,7 +265,6 @@ const AdminVerifycationBooking = () => {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                   <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleSubmitStatus}>Ubah</button>
                 </div>
               </div>

@@ -6,6 +6,12 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 
+export enum statusPendakian {
+  pending = 'pending',
+  naik = 'naik',
+  turun = 'turun'
+}
+
 @Entity()
 export default class Bookings {
   @PrimaryGeneratedColumn('uuid')
@@ -53,11 +59,8 @@ export default class Bookings {
   @Column({ default: false })
   status: boolean;
 
-  @Column({ default: false })
-  naik: boolean;
-
-  @Column({ default: false })
-  turun: boolean;
+  @Column({type: "enum", enum: statusPendakian, default: statusPendakian.pending})
+  status_pendakian: statusPendakian
 
   @Column({ nullable: true })
   tarif: number;
@@ -70,7 +73,6 @@ export default class Bookings {
 
   @Column()
   total_hari: number;
-
 
   @CreateDateColumn()
   public created_at: Date;

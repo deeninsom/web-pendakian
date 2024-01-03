@@ -70,3 +70,42 @@ export class BookingDTO {
     total_hari: number;
 }
 
+
+export class QueryBookingto {
+    @ApiProperty({
+        description: 'find By search',
+        required: false
+    })
+    @IsOptional()
+    search?: string
+
+    @ApiProperty({
+        description: 'find By status verifikasi',
+        required: false
+    })
+    @IsOptional()
+    filterDate?: string
+
+    @ApiProperty({
+        description: 'find By status seleksi',
+        required: false
+    })
+    @IsOptional()
+    status?: string
+}
+
+export class StatusPendakianBookingto {
+    @ApiProperty({
+        description: 'find By search',
+        required: false
+    })
+    @IsOptional()
+    status_pendakian?: string
+
+    @ApiProperty({
+        description: 'find By search',
+        required: false
+    })
+    @IsOptional()
+    booking_id?: string
+}

@@ -8,11 +8,10 @@ const AdminDashboard = () => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [filteredData, setFilteredData] = useState([]);
-  const [statusNaik, setStatusNaik] = useState(false)
-  const [statusTurun, setStatusTurun] = useState(false)
   const [bookingId, setBookingId] = useState()
   const [totalBooking, setTotalBooking] = useState([])
   const [allBooking, setAllBooking] = useState([])
+  const [detailBooking, setDetailBooking]: any = useState()
 
   useEffect(() => {
     axiosInstance.get('/bookings')
@@ -44,22 +43,14 @@ const AdminDashboard = () => {
   const handleOpenModal = (bookingId: any) => {
     axiosInstance.get(`/bookings/${bookingId}`)
       .then((response: any) => {
-        setStatusNaik(response.data.data.naik)
-        setStatusTurun(response.data.data.turun)
         setBookingId(response.data.data.id)
+        setDetailBooking(response.data.data)
       })
       .catch((error) => {
         alert(`Error fetching booking data: ${error}`)
       });
   };
 
-  const handleNaikChange = (event: any) => {
-    setStatusNaik(event.target.checked);
-  };
-
-  const handleTurunChange = (event: any) => {
-    setStatusTurun(event.target.checked);
-  };
 
   useEffect(() => {
     const filteredData = viewData.filter((item: any) => {
@@ -75,8 +66,7 @@ const AdminDashboard = () => {
     axiosInstance
       .post("/bookings/change_status", {
         booking_id: bookingId,
-        naik: statusNaik,
-        turun: statusTurun
+        status_pendakian: detailBooking.status_pendakian
       })
       .then(() => {
         window.location.reload();
@@ -138,9 +128,8 @@ const AdminDashboard = () => {
             <thead style={{ position: "sticky", top: 0 }}>
               <tr>
                 <th scope="col" style={{ width: "30%" }}>Kode Booking</th>
-                <th scope="col" style={{ textAlign: "center" }}>Status</th>
-                <th scope="col" style={{ textAlign: "center" }}>Naik</th>
-                <th scope="col" style={{ textAlign: "center" }}>Turun</th>
+                <th scope="col" style={{ textAlign: "center" }}>Status Verifikasi</th>
+                <th scope="col" style={{ textAlign: "center" }}>Status Pendakian</th>
                 <th scope="col" style={{ textAlign: "center" }}>Total Hari</th>
                 <th scope="col" style={{ textAlign: "center" }}>Action</th>
               </tr>
@@ -151,9 +140,25 @@ const AdminDashboard = () => {
                   <tr key={index}>
                     <td>{item.kode_booking}</td>
                     <td style={{ textAlign: "center" }}>{item.status == false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Pengajuan</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Disetujui</span>}</td>
-                    <td style={{ textAlign: "center" }}>{item.naik === false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Tidak</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Ya</span>}</td>
-                    <td style={{ textAlign: "center" }}>{item.turun == false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Tidak</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Ya</span>}</td>
-                    <td className="text-center">0</td>
+                    <td style={{ textAlign: "center" }}>
+                      {/* {item.naik === false ? <span className="bg-warning" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Tidak</span> : <span className="bg-success" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Ya</span>}*/}
+                      {
+                        item.status_pendakian === 'pending' && (
+                          <span className="bg-secondary" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Pending</span>
+                        )
+                      }
+                      {
+                        item.status_pendakian === 'naik' && (
+                          <span className="bg-primary" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Naik</span>
+                        )
+                      }
+                      {
+                        item.status_pendakian === 'turun' && (
+                          <span className="bg-danger" style={{ paddingLeft: "20px", paddingRight: "20px", fontWeight: "bold", color: "white", paddingTop: "5px", paddingBottom: "5px", borderRadius: "10px", fontSize: "10px" }}>Turun</span>
+                        )
+                      }
+                    </td>
+                    <td className="text-center">{item.total_hari}</td>
                     <td style={{ textAlign: "center" }}><button onClick={() => handleOpenModal(item.id)} style={{ border: 0 }}> <i style={{ cursor: "pointer" }} data-bs-toggle="modal" data-bs-target="#exampleModal" className="fas fa-regular fa-pen-to-square"></i></button></td>
                   </tr>
                 ))
@@ -164,55 +169,25 @@ const AdminDashboard = () => {
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h1 className="modal-title fs-5" id="exampleModalLabel">Ubah data booking</h1>
+                  <h1 className="modal-title fs-5" id="exampleModalLabel">UBAH BOOKING</h1>
                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
-                  <span>Sedang Naik: </span>
-                  <div className="content-1 d-flex gap-2">
-                    <div className="form-check">
-                      <input className="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault1"
-                        checked={statusNaik}
-                        onChange={handleNaikChange}
-                      />
-                      <label className="form-check-label" htmlFor="flexRadioDefault1">
-                        Ya
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input className="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2"
-                        checked={!statusNaik}
-                        onChange={handleNaikChange}
-                      />
-                      <label className="form-check-label" htmlFor="flexRadioDefault2">
-                        Tidak
-                      </label>
-                    </div>
-                  </div>
-                  <span>Sedang Turun: </span>
-                  <div className="content-2 d-flex gap-2">
-                    <div className="form-check">
-                      <input className="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault3"
-                        checked={statusTurun}
-                        onChange={handleTurunChange}
-                      />
-                      <label className="form-check-label" htmlFor="flexRadioDefault3">
-                        Ya
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input className="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault4"
-                        checked={!statusTurun}
-                        onChange={handleTurunChange}
-                      />
-                      <label className="form-check-label" htmlFor="flexRadioDefault4">
-                        Tidak
-                      </label>
+                  <div className="row g-3">
+                    <div className="col">
+                      <label className="form-label" style={{ fontWeight: "bold" }}>Status Pendakian</label>
+                      <select
+                        value={detailBooking?.status_pendakian}
+                        onChange={(e) => setDetailBooking({ ...detailBooking, status_pendakian: e.target.value })}
+                        id="inputState" className="form-select">
+                        {/* <option selected>{detailBooking?.status_pendakian ? detailBooking.status_pendakian.charAt(0).toUpperCase() + detailBooking.status_pendakian.slice(1) : ''}</option> */}
+                        <option value="naik">Naik</option>
+                        <option value="turun">Turun</option>
+                      </select>
                     </div>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                   <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleSubmitChanges} >Ubah</button>
                 </div>
               </div>

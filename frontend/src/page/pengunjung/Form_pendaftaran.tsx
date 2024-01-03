@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const Form_pendaftaran = () => {
   const navigate = useNavigate();
-  
+  const [alertText, setAlertText] = useState(false)
+
   const initialMember = {
     nama: '',
     no_identitas_anggota: '',
@@ -17,7 +18,7 @@ const Form_pendaftaran = () => {
   };
 
   const [formData, setFormData] = useState({
-    jalurPendakian: '',
+    jalurPendakian: 'Tamiajeng',
     tanggalBerangkat: '',
     tanggalPulang: '',
     namaKetua: '',
@@ -34,24 +35,29 @@ const Form_pendaftaran = () => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+
     try {
-      const result = await axiosInstance.post("/bookings", {
-        jalur: formData.jalurPendakian,
-        tanggal_naik: formData.tanggalBerangkat,
-        tanggal_turun: formData.tanggalPulang,
-        nama_ketua: formData.namaKetua,
-        alamat_ketua: formData.alamatKetua,
-        no_identitas_ketua: formData.noIdentitasKetua,
-        no_telepone_ketua: formData.noTeleponKetua,
-        tempat_lahir_ketua: formData.tempatLahirKetua,
-        tanggal_lahir_ketua: formData.tanggalLahirKetua,
-        jenis_kelamin_ketua: formData.jenisKelaminKetua,
-        no_kontak_darurat_ketua: formData.noKontakDaruratKetua,
-        anggota: formData.anggota,
-        tarif: calculateTarif(15000, totalParticipants),
-        rombongan: totalParticipants
-      })
-      navigate(`/view_booking?search=${result.data.data.kode_booking}`);
+      if (formData.noIdentitasKetua.length >= 16) {
+        const result = await axiosInstance.post("/bookings", {
+          jalur: formData.jalurPendakian,
+          tanggal_naik: formData.tanggalBerangkat,
+          tanggal_turun: formData.tanggalPulang,
+          nama_ketua: formData.namaKetua,
+          alamat_ketua: formData.alamatKetua,
+          no_identitas_ketua: formData.noIdentitasKetua,
+          no_telepone_ketua: formData.noTeleponKetua,
+          tempat_lahir_ketua: formData.tempatLahirKetua,
+          tanggal_lahir_ketua: formData.tanggalLahirKetua,
+          jenis_kelamin_ketua: formData.jenisKelaminKetua,
+          no_kontak_darurat_ketua: formData.noKontakDaruratKetua,
+          anggota: formData.anggota,
+          tarif: calculateTarif(15000, totalParticipants),
+          rombongan: totalParticipants
+        })
+        navigate(`/view_booking?search=${result.data.data.kode_booking}`);
+      } else {
+        setAlertText(true)
+      }
     } catch (error: any) {
       if (error.response) {
         alert(`Error: ${error.response.data.message}`)
@@ -84,7 +90,7 @@ const Form_pendaftaran = () => {
       formData.tanggalLahirKetua &&
       formData.jenisKelaminKetua &&
       formData.noKontakDaruratKetua
-      
+
     setIsKetuaComplete(isKetuaComplete);
   }, [formData]);
 
@@ -135,9 +141,9 @@ const Form_pendaftaran = () => {
                 <select
                   value={formData.jalurPendakian}
                   onChange={(e) => setFormData({ ...formData, jalurPendakian: e.target.value })}
+                  disabled
                   id="inputState" className="form-select">
-                  <option selected>--Pilih--</option>
-                  <option>Tamiajeng</option>
+                  <option >Tamiajeng</option>
                 </select>
               </div>
             </div>
@@ -184,6 +190,11 @@ const Form_pendaftaran = () => {
                   value={formData.noIdentitasKetua}
                   onChange={(e) => setFormData({ ...formData, noIdentitasKetua: e.target.value })}
                   type="text" className="form-control" />
+                {
+                  alertText && (
+                    <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>No identitas harus 16 digit</p>
+                  )
+                }
               </div>
               <div className="col-md-6 my-2">
                 <label className="form-label">No. Telepon</label>
@@ -294,8 +305,8 @@ const Form_pendaftaran = () => {
                         <option>Perempuan</option>
                       </select>
                     </div>
-                    <div className="col-md-1 d-flex justify-content-center" style={{marginTop: "45px"}}>
-                      <i className="fa fa-solid fa-trash " onClick={() => removeMember(index)} style={{cursor: "pointer", color: "red"}}></i>
+                    <div className="col-md-1 d-flex justify-content-center" style={{ marginTop: "45px" }}>
+                      <i className="fa fa-solid fa-trash " onClick={() => removeMember(index)} style={{ cursor: "pointer", color: "red" }}></i>
                     </div>
                   </>
                 ))
@@ -347,7 +358,6 @@ const Form_pendaftaran = () => {
                     <span>Jika sudah lengkap, klik kirim untuk registrasi.</span>
                   </div>
                   <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  >Tutup</button>
                     <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" >Kirim</button>
                   </div>
                 </div>

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, 
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { BookingService } from './booking.service';
 import { Response } from 'express';
-import { BookingDTO } from './booking.dto';
+import { BookingDTO, QueryBookingto, StatusPendakianBookingto } from './booking.dto';
 
 @ApiTags('bookings')
 @Controller('bookings')
@@ -10,9 +10,9 @@ export class BookingController {
     constructor(private readonly bookingService: BookingService) { }
 
     @Get()
-    async get(@Res() res: Response, @Query('search') search: string, @Query('filterDate') filterDate: string, @Query('status') status: string) {
+    async get(@Res() res: Response, @Query() query: QueryBookingto) {
         try {
-            const data = await this.bookingService.get(search, filterDate, status)
+            const data = await this.bookingService.get(query.search, query.filterDate, query.status)
             // console.log(data)
             return res.status(200).json({ message: "Berhasil menampilkan booking", data })
         } catch (error) {
@@ -54,23 +54,6 @@ export class BookingController {
     }
 
 
-    @ApiBody({
-        schema: {
-            type: 'object',
-            properties: {
-                product_name: {
-                    type: 'string'
-                },
-                price: {
-                    type: 'number'
-                },
-                supplier: {
-                    type: 'string'
-                }
-            },
-            required: ['product_name', 'supplier'],
-        },
-    })
     @Put(':id')
     async update(@Param('id') id: string, @Body() payload: any, @Res() res: Response) {
         try {
@@ -99,13 +82,8 @@ export class BookingController {
         }
     }
 
-    @ApiBody({
-        schema: {
-            type: 'object'
-        },
-    })
     @Post('change_status')
-    async submitUp(@Body() payload: any, @Res() res: Response) {
+    async submitUp(@Body() payload: StatusPendakianBookingto, @Res() res: Response) {
         try {
             const datas: any = payload
             const data = await this.bookingService.submitUp(datas);
