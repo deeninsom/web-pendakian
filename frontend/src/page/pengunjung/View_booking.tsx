@@ -71,7 +71,7 @@ const View_booking = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             const currentTime = new Date().getTime();
-            const bookingTime = new Date(bookingData[0]?.created_at).getTime() + 1 * 60 * 1000;// Tambahkan waktu yang diinginkan di sini
+            const bookingTime = new Date(bookingData[0]?.created_at).getTime() + 24 * 60 * 60 * 1000;
             const difference = bookingTime - currentTime;
 
             if (difference > 0) {
@@ -85,7 +85,7 @@ const View_booking = () => {
                 setCountdown("Booking expired");
                 clearInterval(intervalId);
 
-                const bookingId = bookingData[0]?.id; 
+                const bookingId = bookingData[0]?.id;
                 axiosInstance
                     .delete(`/bookings/${bookingId}`)
                     .then(() => {
